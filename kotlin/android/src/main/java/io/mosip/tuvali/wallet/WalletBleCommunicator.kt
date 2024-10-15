@@ -81,6 +81,12 @@ class WalletBleCommunicator(context: Context, private val eventEmitter: EventEmi
     transferHandler = TransferHandler(handlerThread.looper, central, VerifierBleCommunicator.SERVICE_UUID, this@WalletBleCommunicator)
   }
 
+  fun viewAvailableConnections(callback: (List<BluetoothDevice>) -> Unit) {
+    Log.d(logTag, "viewAvailableConnections called at WalletBleCommunicator.kt")
+    central.viewAvailableConnections(VerifierBleCommunicator.SERVICE_UUID, callback)
+  }
+
+
   fun stop(onDestroy: () -> Unit) {
     callbacks[CentralCallbacks.ON_DESTROY_SUCCESS_CALLBACK] = onDestroy
     central.stop()

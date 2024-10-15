@@ -1,6 +1,7 @@
 package io.mosip.tuvali.wallet
 
 import android.content.Context
+import android.bluetooth.BluetoothDevice
 import android.util.Log
 import io.mosip.tuvali.common.events.DisconnectedEvent
 import io.mosip.tuvali.common.events.Event
@@ -36,6 +37,13 @@ class Wallet(private val context: Context) : IWallet {
       bleCommunicator?.startScanning()
     }
   }
+
+  override fun viewAvailableConnections(callback: (List<BluetoothDevice>) -> Unit) {
+    Log.d(logTag, "viewAvailableConnections called in Wallet.kt")
+    bleCommunicator = WalletBleCommunicator(context, eventEmitter, bleExceptionHandler::handleException)
+    bleCommunicator?.viewAvailableConnections(callback)
+  }
+
 
   override fun sendData(payload: String) {
     Log.d(logTag, "send: message $payload at ${System.nanoTime()}")

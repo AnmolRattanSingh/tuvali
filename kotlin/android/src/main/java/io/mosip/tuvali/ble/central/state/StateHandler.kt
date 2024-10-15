@@ -23,6 +23,7 @@ class StateHandler(
   //TODO: Add explicit ordinal value for below enum
   enum class States {
     Init,
+    ScanningAvailableConnections,
     Scanning,
     WaitingToConnect,
     Connecting,
@@ -46,6 +47,11 @@ class StateHandler(
         Log.d(logTag, "starting scan.")
         controller.scan(msg.obj as ScanStartMessage)
         currentState = States.Scanning
+      }
+      IMessage.CentralStates.VIEW_AVAILABLE_CONNECTIONS.ordinal -> {
+        Log.d(logTag, "viewing available connections.")
+        controller.viewAvailableConnections(msg.obj as ViewAvailableConnectionsMessage)
+        currentState = States.ScanningAvailableConnections
       }
       IMessage.CentralStates.SCAN_STOP.ordinal -> {
         Log.d(logTag, "stopping scan.")

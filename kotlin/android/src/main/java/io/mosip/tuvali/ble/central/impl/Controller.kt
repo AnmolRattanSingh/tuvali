@@ -41,6 +41,12 @@ class Controller(val context: Context) {
     )
   }
 
+  fun viewAvailableConnections(viewAvailableConnectionsMessage: ViewAvailableConnectionsMessage) {
+    Log.d(logTag, "viewAvailableConnections in Controller.kt")
+    scanner = Scanner(context)
+    scanner?.viewAvailableConnections(viewAvailableConnectionsMessage.serviceUUID, viewAvailableConnectionsMessage.callback)
+  } 
+
   fun stopScan() {
     scanner?.stopScan()
   }

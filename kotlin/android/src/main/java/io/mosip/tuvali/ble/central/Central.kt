@@ -4,13 +4,16 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.HandlerThread
 import android.os.Process
+import android.util.Log
 import io.mosip.tuvali.ble.central.impl.Controller
 import io.mosip.tuvali.ble.central.state.IMessageSender
+import io.mosip.tuvali.transfer.Util.Companion.getLogTag
 import io.mosip.tuvali.ble.central.state.StateHandler
 import io.mosip.tuvali.ble.central.state.message.*
 import java.util.*
 
 class Central(context: Context, centralLister: ICentralListener) {
+  private val logTag = getLogTag(javaClass.simpleName)
   private val controller: Controller = Controller(context)
   private val handlerThread = HandlerThread("CentralHandlerThread", Process.THREAD_PRIORITY_DEFAULT)
   private var messageSender: IMessageSender
@@ -29,6 +32,19 @@ class Central(context: Context, centralLister: ICentralListener) {
   fun quitHandler() {
     handlerThread.quitSafely()
   }
+
+  // fun viewAvailableConnections(serviceUuid: UUID) : List<BluetoothDevice> {
+  //   Log.d(logTag, "viewAvailableConnections in Central.kt")
+  //   // messageSender.sendMessage(ViewAvailableConnectionsMessage(serviceUuid))
+  //   return controller.viewAvailableConnections(ViewAvailableConnectionsMessage(serviceUuid))
+  // }
+
+  fun viewAvailableConnections(serviceUUID: UUID, callback: (List<BluetoothDevice>) -> Unit) {
+    Log.d(logTag, "viewAvailableConnections in Central.kt")
+    messageSender.sendMessage(ViewAvailableConnectionsMessage(serviceUUID, callback))
+    // controller.viewAvailableConnections(serviceUUID, callback)
+  }
+
 
   fun disconnectAndClose() {
     messageSender.sendMessage(DisconnectAndCloseMessage())
